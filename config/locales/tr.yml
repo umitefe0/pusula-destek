@@ -1,0 +1,18 @@
+tr:
+  activerecord:
+    attributes:
+      ticket:
+        subject: Başlık
+        description: Açıklama
+      message:
+        body: Mesaj
+    errors:
+      messages:
+        record_invalid: "Kayıt geçersiz: %{errors}"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      blank: boş bırakılamaz
+      too_long: "en fazla %{count} karakter olabilir"
+      inclusion: geçerli değil
+      required: gerekli

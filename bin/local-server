@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require_relative "../config/environment"
+require "rackup"
+require "rackup/handler/webrick"
+Rackup::Handler::WEBrick.run(Rails.application, Host: "127.0.0.1", Port: ENV.fetch("PORT", 3000).to_i)

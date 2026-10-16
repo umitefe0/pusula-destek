@@ -1,0 +1,12 @@
+<% content_for :title, "Yeni talep" %>
+<%= link_to "← Taleplerime dön", tickets_path, class: "back-link" %>
+<div class="page-heading"><div><div class="eyebrow">BİRLİKTE ÇÖZELİM</div><h1>Size nasıl yardımcı olabiliriz?</h1><p>İlk yanıt hedefimiz talep oluşturulduktan sonra 4 saat.</p></div></div>
+<section class="form-panel">
+  <% if @ticket.errors.any? %><div class="flash alert" role="alert"><%= @ticket.errors.full_messages.join(" · ") %></div><% end %>
+  <%= form_with model: @ticket do |f| %>
+    <div class="field"><%= f.label :subject, "Talep başlığı" %><%= f.text_field :subject, required: true, maxlength: 160, placeholder: "Kısaca ne olduğunu anlatın" %></div>
+    <div class="field"><%= f.label :description, "Nasıl bir sorun yaşıyorsunuz?" %><%= f.text_area :description, required: true, maxlength: 10000, rows: 7, placeholder: "Ne yapmaya çalışıyordunuz, ne oldu? Yalnızca örnek veri kullanın." %></div>
+    <div class="field"><%= f.label :priority, "Öncelik" %><%= f.select :priority, [["Düşük — Genel bir sorum var", "low"], ["Normal — Yardıma ihtiyacım var", "normal"], ["Yüksek — İşimi tamamlayamıyorum", "high"]] %><small>Tüm önceliklerde ilk yanıt hedefi 4 takvim saatidir.</small></div>
+    <div class="form-actions"><%= link_to "Vazgeç", tickets_path, class: "button button-ghost" %><%= f.submit "Talebi oluştur →", class: "button button-primary" %></div>
+  <% end %>
+</section>

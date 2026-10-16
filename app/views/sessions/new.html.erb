@@ -1,0 +1,12 @@
+<% content_for :title, "Hoş geldiniz" %>
+<section class="welcome">
+  <div class="eyebrow">DAHA NET İLETİŞİM. DAHA İYİ DESTEK.</div>
+  <h1>Her talep,<br><span>doğru yöne.</span></h1>
+  <p class="welcome-lead">Talebi üstlenin, süreyi takip edin ve müşterinize güvenle yanıt verin. Ekip içi konuşmalarınız ekipte kalsın.</p>
+  <div class="entry-grid">
+    <article class="entry-card"><div class="entry-icon">◫</div><h2>Destek ekibiyim</h2><p>Kuyruğu yönetin, talep üstlenin ve müşteriye yanıt gönderin.</p><%= button_to "Görevli demosunu aç →", demo_session_path(role: "agent"), class: "button button-primary" %></article>
+    <article class="entry-card"><div class="entry-icon mint">↗</div><h2>Destek istiyorum</h2><p>Yeni talep oluşturun, yanıtları görün ve çözümü takip edin.</p><%= button_to "Müşteri demosunu aç →", demo_session_path(role: "customer"), class: "button button-secondary" %></article>
+  </div>
+  <div class="welcome-facts"><span>◷ 4 saat ilk yanıt hedefi</span><span>↻ 3 gün takip eşiği</span><span>✓ 7 gün yeniden açma</span></div>
+  <p class="muted">Her tarayıcı oturumu kendi örnek çalışma alanını oluşturur. Roller arasında geçerken talepleriniz korunur.</p>
+</section>

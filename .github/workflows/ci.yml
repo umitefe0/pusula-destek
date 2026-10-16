@@ -1,0 +1,24 @@
+name: Rails tests
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      BUNDLE_WITHOUT: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.11'
+          bundler-cache: true
+      - name: Prepare database
+        run: bundle exec rails db:prepare
+      - name: Check autoloading
+        run: bundle exec rails zeitwerk:check
+      - name: Run time rules, transitions, privacy and complete workflow tests
+        run: bundle exec rails test
+      - name: Compile assets
+        run: bundle exec rails assets:precompile

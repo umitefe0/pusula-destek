@@ -1,0 +1,21 @@
+<% content_for :title, current_user.agent? ? "Destek kuyruğu" : "Taleplerim" %>
+<div class="page-heading"><div><div class="eyebrow">HER TALEBİN BİR SONRAKİ ADIMI VAR</div><h1><%= current_user.agent? ? "Destek kuyruğu" : "Taleplerim" %><span class="heading-dot">.</span></h1><p><%= current_user.agent? ? "Öncelikleri görün, iletişimi net tutun, çözümü hızlandırın." : "Destek talepleriniz ve ekibimizle yaptığınız görüşmeler." %></p></div><% if current_user.customer? %><%= link_to "+ Yeni talep", new_ticket_path, class: "button button-primary" %><% else %><span class="today"><%= Time.current.strftime("%d.%m.%Y") %> <small>İstanbul saati</small></span><% end %></div>
+<section class="stats" aria-label="Talep özeti">
+  <article class="stat-card"><div>Açık talepler <span>◫</span></div><strong><%= @counts[:active] %></strong><small>Çözüm yolculuğu sürüyor</small></article>
+  <article class="stat-card coral"><div>İlk yanıt gecikti <span>◷</span></div><strong><%= @counts[:overdue] %></strong><small>4 saatlik yanıt hedefi aşıldı</small></article>
+  <article class="stat-card amber"><div>Takip bekliyor <span>↻</span></div><strong><%= @counts[:follow_up] %></strong><small>3 gündür müşteri yanıtı yok</small></article>
+  <article class="stat-card mint"><div>Çözüldü <span>✓</span></div><strong><%= @counts[:solved] %></strong><small>Bir sorun daha geride kaldı</small></article>
+</section>
+<section class="queue-panel">
+  <div class="queue-toolbar"><nav class="tabs" aria-label="Talep filtreleri"><% [["all", "Tüm açıklar"], ["unassigned", "Atanmamış"], ["overdue", "Gecikenler"], ["follow_up", "Takip"], ["solved", "Çözülenler"]].each do |key,label| %><%= link_to label, tickets_path(filter: key), class: "tab #{@filter == key ? 'selected' : ''}" %><% end %></nav>
+    <%= form_with url: tickets_path, method: :get, class: "search" do |f| %><%= hidden_field_tag :filter, @filter %><%= f.search_field :q, value: params[:q], placeholder: "Talep başlığında ara…", aria: { label: "Talep başlığında ara" } %><%= f.submit "Ara", class: "text-button" %><% end %>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>TALEP / MÜŞTERİ</th><th>DURUM</th><th>ÖNCELİK</th><th>İLK YANIT</th><th>ATANAN</th><th><span class="sr-only">Aç</span></th></tr></thead><tbody>
+  <% @tickets.each do |ticket| %>
+    <tr><td><div class="ticket-ref">#<%= ticket.id.to_s.rjust(4, '0') %><% if ticket.follow_up_due? %><span class="follow-up-label">Takip zamanı</span><% end %></div><%= link_to ticket.subject, ticket, class: "ticket-title" %><div class="ticket-meta"><%= ticket.customer.name %><span>·</span><%= clock_label(ticket.created_at) %></div></td><td><span class="status <%= ticket.status %>"><span>●</span> <%= status_label(ticket) %></span></td><td><span class="priority <%= ticket.priority %>">▰ <%= priority_label(ticket) %></span></td><td><span class="sla <%= ticket.overdue? ? 'late' : '' %>"><%= sla_label(ticket) %></span><small class="cell-sub"><%= clock_label(ticket.first_response_due_at) %></small></td><td><span class="assignee"><%= ticket.assignee&.name || "Atanmamış" %></span></td><td><%= link_to "↗", ticket, class: "open-ticket", aria: { label: "#{ticket.subject} talebini aç" } %></td></tr>
+  <% end %>
+  <% if @tickets.empty? %><tr><td colspan="6"><div class="empty-state"><span>✓</span><h3>Burada bekleyen talep yok.</h3><p>Başka bir filtre deneyin veya yeni bir talep oluşturun.</p></div></td></tr><% end %>
+  </tbody></table></div>
+  <div class="table-footer"><span><%= @tickets.length %> talep gösteriliyor · en fazla 100</span><span>İlk yanıt hedefine göre sıralandı ↑</span></div>
+</section>
+<div class="bottom-tip"><span class="tip-icon">↗</span><div><strong>Göndermeden önce bir kez daha görün.</strong><p>Müşteriye yanıtlar alıcısıyla birlikte önizlenir. İç notlar için ayrı bir alan vardır.</p></div></div>
