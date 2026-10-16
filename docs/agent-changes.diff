@@ -1,0 +1,14 @@
+diff --git a/docs/agent-initial.md b/AGENT.md
+index c099562..226a88c 100644
+--- a/docs/agent-initial.md
++++ b/AGENT.md
+@@ -27,3 +27,9 @@ Talep = Ticket; müşteri = customer; görevli = agent; iç not = internal; mü
+ - Canlıda PostgreSQL + Puma; geliştirme/testte SQLite, Windows önizlemesinde WEBrick.
+ - Bu sürüm oturum başına yalıtılmış bir demo. Gerçek hesap/parola/SSO ve e-posta teslimatı yok. Müşteri yanıtı portalda görünür.
+ - Zaman uyarıları sayfa yenilendiğinde hesaplanır; arka plan bildirimi varmış gibi sunulmaz.
++
++## 17 Ekim doğrulama sonrası değişiklikler
++- Tam sınır testlerinde travel_to'nun mikrosaniyeyi silmesine karşı with_usec: true kullanılır.
++- Ruby'nin Windows'taki Türkçe dizin sorununda yerel ASCII sürücü takma adı kullanılabilir; bu makineye özel yol repoya konmaz.
++- Bağımlılık kilidi Windows ve Linux platformlarını içerir.
++- Gerçek harcama/token sayısı ölçülmediyse bilinmiyor yazılır; tahmin gerçek maliyet diye gösterilmez.
