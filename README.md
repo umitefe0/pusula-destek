@@ -33,7 +33,7 @@ Evren sabit **2025 ABD Fortune 500** listesidir; Global 500 değildir. Gelir, pi
 | Yaklaşık SaaS sayısı göstergesi | Şirket başına ortalama 305 | [Zylo 2026](https://zylo.com/blog/saas-statistics); Zylo örneklemi, Fortune 500 sayımı değil. |
 | Yıllık SaaS harcaması göstergesi | Örneklem ortalaması 55,7 milyon dolar; 10.000 üzeri çalışanlı işletmelerde 123,5–375,5 milyon dolar | [Zylo 2026](https://zylo.com/blog/saas-statistics); Fortune 500 firmalarının kesin bütçeleri değildir. |
 
-Yöntem: Fortune sayfasındaki kamuya açık tablo verisinde sıra 1–500 şirketleri tekilleştirip çalışan ve dolu piyasa değeri alanlarında minimum/maksimum hesaplandı. Özel şirketlerde eksik piyasa değerleri sıfır sayılmadı. SaaS rakamları ayrı bir araştırma örnekleminden yaklaşık gösterge olarak alındı. Kaynaklar Ekim 2026 çalışma oturumlarında incelendi.
+Yöntem: Fortune sayfasındaki kamuya açık tablo verisinde sıra 1–500 şirketleri tekilleştirip çalışan ve dolu piyasa değeri alanlarında minimum/maksimum hesaplandı. Özel şirketlerde eksik piyasa değerleri sıfır sayılmadı. SaaS rakamları ayrı bir araştırma örnekleminden yaklaşık gösterge olarak alındı. Kaynaklar Ekim 2026 çalışma oturumlarında incelendi. [Hesap betiği](docs/fortune_ranges.py) ve [hesap çıktısı](docs/fortune-range-results.json) repodadır; kaynak tablonun tamamı yeniden dağıtılmaz.
 
 ## SaaS seçimi ve ödeme kanıtı
 
@@ -52,6 +52,8 @@ Ayrı form/uç nokta, 15 dakika geçerli imzalı önizleme ve çift gönderimi �
 ## Faz 2 — boyut, süre ve maliyet
 
 Orijinal kod kapalıdır; doğrulanmış satır sayısı yoktur. **Yaklaşık 300.000 satır**, 200–500 bin belirsizlik aralığıyla kendi mühendislik tahminimizdir, satıcı verisi değildir. Varsayımsal dağılım: talep/iş akışı 70 bin, çok kanallı iletişim 60 bin, hesap/yetki 40 bin, otomasyon/SLA 40 bin, arama/raporlama 50 bin, bilgi bankası 40 bin. Yukarıdaki resmi müşteri hikâyesi kurumsal modül kapsamını destekler; sayısal dağılım bizim varsayımımızdır.
+
+Bu repodaki app/config/db/test kaynakları 36 dosyada 1.139 fiziksel satırdır (Ruby, ERB, CSS, SVG, YAML; boş satırlar dahil; bağımlılıklar hariç). Sıkıştırılmış CSS/ERB nedeniyle bu sayı ürün karmaşıklığının ölçüsü değildir.
 
 Bu aort dilimi için başlangıç tahmini **2–4 aktif gün**, 2–6 milyon giriş ve 0,4–1 milyon çıkış tokenı. [GPT-5.4 resmi fiyatı](https://developers.openai.com/api/docs/models/gpt-5.4) karşılaştırma ölçütüyle (milyon giriş 2,50 dolar, çıkış 15 dolar) **11–30 dolar**, iki kat deneme payıyla **22–60 dolar**. Uzun bağlam ek ücretleri uygulanmayan istekler varsayılmıştır. Bu hesap kullanılan Codex oturumunun faturası değildir.
 
@@ -75,7 +77,7 @@ bundle exec rails assets:precompile
 
 Windows önizlemesi: `ruby bin/local-server`. Yerel derleyici ASCII dışı yolda sorun çıkarırsa ASCII sürücü takma adı kullanılabilir. Yerel ortam ve sırlar repoya eklenmez.
 
-17 Ekim 2026 yerel sonuç: **36 test, 179 assertion, 0 failure, 0 error, 0 skip**. Tam zaman sınırları `travel_to(..., with_usec: true)` ile korunur. CI rozeti gerçek GitHub Actions durumunu gösterir; yerel sonuç CI yerine geçmez.
+17 Ekim 2026 yerel sonuç: **36 test, 179 assertion, 0 failure, 0 error, 0 skip**. Tam zaman sınırları `travel_to(..., with_usec: true)` ile korunur. Linux GitHub Actions doğrulaması da [başarıyla tamamlandı](https://github.com/umitefe0/pusula-destek/actions/runs/38976881107) (e8b4acb). CI rozeti en güncel çalıştırmayı gösterir.
 
 ## Deploy
 

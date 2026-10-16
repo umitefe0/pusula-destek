@@ -1,0 +1,28 @@
+{
+  "year": 2025,
+  "count": 500,
+  "ranges": {
+    "Employees": {
+      "min": [
+        486.0,
+        "Gold.com"
+      ],
+      "max": [
+        2100000.0,
+        "Walmart"
+      ],
+      "observed": 500
+    },
+    "Market Value ($M)": {
+      "min": [
+        139.8,
+        "QVC Group"
+      ],
+      "max": [
+        3336853.1,
+        "Apple"
+      ],
+      "observed": 472
+    }
+  }
+}
