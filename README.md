@@ -60,7 +60,7 @@ Bu aort dilimi için başlangıç tahmini **2–4 aktif gün**, 2–6 milyon gir
 
 300 bin satırlık daha geniş çekirdek için ayrı kaba senaryo: satır başına 10 çıkış tokenı ve 2–3 üretim/onarım turu = 6–9 milyon çıkış; 20–40 milyon girişle **140–235 dolar ham model bedeli**. Entegrasyon ve insan doğrulaması dahil **20–60 aktif gün** öngörüsü deneyle doğrulanmadı. Bu hesap kurumsal ürün eşdeğerliğini veya operasyon maliyetlerini kapsamaz.
 
-**Gerçekleşen:** Çalışma 12 Ekim'de başladı, 17 Ekim'de devam etti; kesinti nedeniyle beş takvim günü beş aktif gün değildir. Aktif süre ve token sayısı ölçülmedi. Ek ücretli API/hosting satın alınmadı. Mevcut abonelik bedeli ve bu işe düşen pay bilinmediğinden gerçek toplam dolar maliyeti hesaplanamadı. Tahmin gerçekleşmiş harcama olarak sunulmuyor.
+**Gerçekleşen:** Çalışma 12 Ekim'de başladı, 17 Ekim'de devam etti; kesinti nedeniyle beş takvim günü beş aktif gün değildir. Aktif süre ve token sayısı ölçülmedi. Ek ücretli API/hosting satın alınmadı. Kullanıcının bildirdiği mevcut plan **ChatGPT Plus, aylık 20 ABD dolarıdır**. Plus bir abonelik planıdır; model adı değildir. Bu çalışma mevcut abonelik kapsamında yapıldı; ödeve özel ek API/hosting harcaması **0 dolar** oldu. Aylık 20 doların yalnızca bu ödeve düşen payı ve token bazlı karşılığı ölçülmedi; bu nedenle 20 doların tamamını ödeve özel tüketim olarak göstermiyoruz. Tahmin gerçekleşmiş harcama olarak sunulmuyor.
 
 ## Kurulum ve doğrulama
 
