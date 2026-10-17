@@ -4,7 +4,8 @@
 
 Ruby on Rails 8.1 ile müşteri talebi → atama → yanıt → çözüm → yeniden açma. Kendi adımız ve pusula logomuz vardır. İlham kaynağı **Zendesk**; ürünle bağlantılı değiliz.
 
-- Canlı URL: yayın doğrulaması bekleniyor.
+- **Canlı URL: https://pusula-destek.onrender.com**
+- [5 dakikalık sunum provası ve kod haritası](docs/sunum.md)
 - Repo: https://github.com/umitefe0/pusula-destek
 - Çalışma kuralları: [AGENT.md](AGENT.md); [ilk sürüm](docs/agent-initial.md).
 
@@ -81,9 +82,9 @@ Windows önizlemesi: `ruby bin/local-server`. Yerel derleyici ASCII dışı yold
 
 ## Deploy
 
-Render ilk kez kullanılan platformdur. `render.yaml` ücretsiz web servisi ve PostgreSQL tanımlar. Build `bash bin/render-build.sh`; start `bundle exec puma -C config/puma.rb`; sağlık `/up`. SECRET_KEY_BASE Render'da üretilir; DATABASE_URL veritabanından alınır.
+Render ilk kez kullanılan platformdur. `render.yaml` ücretsiz web servisi ve PostgreSQL tanımlar. Build `bash bin/render-build.sh`; start `bundle exec puma -C config/puma.rb`; sağlık `/up`. SECRET_KEY_BASE Render'da üretilir; DATABASE_URL veritabanından alınır. Herkese açık Git URL'siyle kurulduğu için otomatik deploy bağlantısı yoktur; kod değişince Render panelinde Manual Deploy → Deploy latest commit kullanılır.
 
-[Ücretsiz plan](https://render.com/docs/free): web servisi 15 dakika hareketsizlikte uyuyabilir; ücretsiz PostgreSQL 30 gün sonra sona erer. Sunum öncesi uygulamayı açıp uyandırın ve panelde veritabanı süresini kontrol edin. [Rails 8 deploy belgesi](https://render.com/docs/deploy-rails-8). Veriler geçici uygulama diskinde değil PostgreSQL'de tutulur.
+[Ücretsiz plan](https://render.com/docs/free): web servisi 15 dakika hareketsizlikte uyuyabilir; ücretsiz PostgreSQL 30 gün sonra sona erer. Sunum öncesi uygulamayı açıp uyandırın ve panelde veritabanı süresini kontrol edin. Oluşturulan ücretsiz veritabanının panelde görünen bitiş tarihi **16 Kasım 2026**. [Rails 8 deploy belgesi](https://render.com/docs/deploy-rails-8). Veriler geçici uygulama diskinde değil PostgreSQL'de tutulur.
 
 ## Sunum ve kod haritası
 
@@ -104,4 +105,4 @@ Render ilk kez kullanılan platformdur. `render.yaml` ücretsiz web servisi ve P
 - Kullanıcı deneyinde ölçülmüş hata azalması yok.
 - G1–G5 tanımları sağlanmadı; kendi belgelerimiz resmi G1–G5 diye adlandırılmadı.
 
-Canlı URL ve yeşil CI doğrulanmadan teslim hazır sayılmaz. Sunumda yalnızca gerçekten çalışan özellikler gösterilir.
+17 Ekim 2026 canlı tarayıcı kontrolü tamamlandı: talep oluşturma → üstlenme → iç not → alıcı önizlemesi → müşteriye yanıt → müşteri yanıtı → çözme → müşteri olarak yeniden açma. Müşteri görünümünde iç notun bulunmadığı ayrıca kontrol edildi. /up sağlık kontrolü HTTP 200 döndü. Sunumda yalnızca gerçekten çalışan özellikler gösterilir.
