@@ -1,4 +1,39 @@
-<% content_for :title, "Yanıt önizlemesi" %>
+<% content_for :title, "Gönderim kontrolü" %>
 <%= link_to "← Talebe dön", @ticket, class: "back-link" %>
-<div class="page-heading"><div><div class="eyebrow">GÖNDERMEDEN ÖNCE SON KONTROL</div><h1>Doğru kişiye, doğru mesaj.</h1><p>Bu mesaj müşteri portalında görünür olacak.</p></div></div>
-<section class="preview-panel"><div class="recipient"><span class="avatar mint"><%= @ticket.customer.name.first %></span><div><small>ALICI · MÜŞTERİ</small><strong><%= @ticket.customer.name %></strong><span><%= @ticket.customer.email %></span></div><span class="status open">Müşteriye açık</span></div><div class="preview-subject">Talep #<%= @ticket.id %> · <%= @ticket.subject %></div><div class="preview-body"><%= simple_format(@draft.body) %></div><div class="preview-warning">İç notlar bu mesaja eklenmez. Yalnızca yukarıdaki metin gönderilir.</div><%= form_with url: reply_ticket_path(@ticket) do |f| %><%= hidden_field_tag :preview_token, @preview_token %><div class="form-actions"><%= link_to "Vazgeç, talebe dön", @ticket, class: "button button-ghost" %><%= f.submit "Onayla ve müşteriye gönder →", class: "button button-primary" %></div><% end %></section>
+<div class="page-heading"><div><div class="eyebrow">MÜŞTERİYE GİTMEDEN ÖNCE</div><h1>Bir kez daha kontrol.</h1><p>Henüz hiçbir mesaj gönderilmedi.</p></div></div>
+<section class="preview-panel">
+  <div class="guard-result <%= @review.status_safe? ? 'guard-safe' : 'guard-stop' %>" role="status" data-review-status="<%= @review.status %>">
+    <% if @review.status_safe? %>
+      <h2>✓ İçerik kontrolü tamamlandı</h2><p>Belirgin bir risk bulunmadı. Alıcıyı ve metni son kez gözden geçir.</p>
+    <% elsif @review.status_unavailable? || @review.status_checking? %>
+      <h2>Kontrol tamamlanamadı</h2><p>Kontrol sonucu olmadan müşteriye gönderim açılmaz.</p>
+    <% else %>
+      <h2>Emin misin?</h2><p>Bu taslak müşteriye uygun olmayabilir. Gönder düğmesi koruma nedeniyle gizlendi.</p>
+    <% end %>
+    <p><strong>Neden?</strong> <%= @review.reason %></p>
+    <small>Kontrol #<%= @review.id %> · <%= clock_label(@review.created_at) %> · <%= @review.model %></small>
+  </div>
+  <div class="recipient"><span class="avatar mint"><%= @ticket.customer.name.first %></span><div><small>ALICI · MÜŞTERİ</small><strong><%= @ticket.customer.name %></strong><span><%= @ticket.customer.email %></span></div></div>
+  <div class="preview-subject">Talep #<%= @ticket.id %> · <%= @ticket.subject %></div>
+  <div class="preview-body"><%= simple_format(@draft.body) %></div>
+  <% if @preview_token.present? %>
+    <%= form_with url: reply_ticket_path(@ticket) do |f| %>
+      <%= hidden_field_tag :preview_token, @preview_token %>
+      <div class="form-actions"><%= f.submit "Onayla ve müşteriye gönder →", class: "button button-primary" %></div>
+    <% end %>
+  <% end %>
+  <div class="preview-warning">Kontrol hata yapabilir; son inceleme sende. Onay yalnız bu metin için 15 dakika geçerlidir. İç notlar müşteriye gönderilmez.</div>
+</section>
+<section class="compose-panel guard-edit">
+  <h2>Taslağı düzelt</h2><p>Metni değiştirirsen yeniden kontrol edilir. Kontrol, taslağı Groq'a iletir; demoda gerçek kişisel veri kullanma.</p>
+  <%= form_with url: preview_reply_ticket_path(@ticket) do |f| %>
+    <%= f.label :body, "Yeni taslak", for: "review-body" %>
+    <%= f.text_area :body, id: "review-body", value: @draft.body, rows: 5, required: true, maxlength: 10000 %>
+    <div class="form-actions"><%= f.submit "Yeniden kontrol et →", class: "button button-primary" %></div>
+  <% end %>
+  <%= form_with url: internal_note_ticket_path(@ticket) do |f| %>
+    <%= hidden_field_tag :body, @draft.body %>
+    <div class="form-actions"><%= f.submit "Kontrol edilen taslağı ekip içi not olarak kaydet", class: "button button-note" %></div>
+  <% end %>
+  <small>İç not seçeneği kontrol edilen metni kaydeder. Düzenleme kutusundaki değişiklikler için önce yeniden kontrol et.</small>
+</section>

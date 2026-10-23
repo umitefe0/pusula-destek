@@ -12,6 +12,7 @@ class Ticket < ApplicationRecord
   belongs_to :customer, class_name: "User"
   belongs_to :assignee, class_name: "User", optional: true
   has_many :messages, dependent: :destroy
+  has_many :reply_reviews, dependent: :destroy
   has_many :ticket_events, dependent: :destroy
   enum :status, { new_ticket: 0, open: 1, pending: 2, solved: 3 }, validate: true
   enum :priority, { low: 0, normal: 1, high: 2 }, prefix: true, validate: true

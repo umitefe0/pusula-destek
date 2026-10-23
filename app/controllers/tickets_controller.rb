@@ -64,7 +64,10 @@ class TicketsController < ApplicationController
     raise Ticket::InvalidTransition, "Önce talebi üstlenin." unless @ticket.open? || @ticket.pending?
     @draft = @ticket.messages.build(author: current_user, body: params[:body].to_s.strip, visibility: :public_reply)
     if @draft.valid?
-      @preview_token = verifier.generate({ ticket_id: @ticket.id, author_id: current_user.id, body: @draft.body, key: SecureRandom.uuid }, expires_in: 15.minutes, purpose: :public_reply)
+      @review = ReviewOutgoingReply.call(ticket: @ticket, author: current_user, body: @draft.body)
+      if @review.status_safe?
+        @preview_token = verifier.generate({ ticket_id: @ticket.id, author_id: current_user.id, body: @draft.body, key: SecureRandom.uuid, review_id: @review.id }, expires_in: 15.minutes, purpose: :public_reply)
+      end
     else
       raise ActiveRecord::RecordInvalid, @draft
     end
@@ -75,7 +78,8 @@ class TicketsController < ApplicationController
     unless draft && draft[:ticket_id] == @ticket.id && draft[:author_id] == current_user.id
       raise Ticket::InvalidTransition, "Önizleme geçersiz veya 15 dakikalık süresi doldu. Yanıtı yeniden önizleyin."
     end
-    workflow.public_reply!(body: draft[:body], submission_key: draft[:key])
+    review = @ticket.reply_reviews.find_by(id: draft[:review_id], author: current_user)
+    workflow.public_reply!(body: draft[:body], submission_key: draft[:key], review: review)
     redirect_to @ticket, notice: "Yanıt müşteriye gönderildi."
   end
 

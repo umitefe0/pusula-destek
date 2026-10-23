@@ -1,6 +1,20 @@
 require "test_helper"
 
 class CoreFlowTest < ActionDispatch::IntegrationTest
+  # These integration tests exercise the application using an explicit provider double.
+  # Live semantic accuracy is evaluated separately; no API key is used in CI.
+  def before_setup
+    super
+    @guard_result = ContentGuard::Result.new(status: "safe", category: "customer_ready", reason: "Test double", model: "test-double")
+  end
+
+  def run
+    fake = Object.new
+    read_result = -> { @guard_result }
+    fake.define_singleton_method(:call) { |_body| read_result.call }
+    ContentGuard.stub(:new, -> { fake }) { super }
+  end
+
   def sign_in(role)
     post demo_session_path(role: role)
     assert_redirected_to tickets_path
@@ -16,6 +30,56 @@ class CoreFlowTest < ActionDispatch::IntegrationTest
 
   def preview_token
     response.parsed_body.at_css('input[name="preview_token"]')['value']
+  end
+
+  test "risky draft hides send and can become private note" do
+    create_ticket
+    sign_in("agent")
+    post assign_ticket_path(@ticket)
+    @guard_result = ContentGuard::Result.new(status: "blocked", category: "internal_information", reason: "Ekip içi bilgi içeriyor.", model: "test-double")
+    body = "ÜMİT-DEMO: Bu müşteriye gerçek maliyeti açıklamayalım."
+    assert_no_difference "Message.count" do
+      post preview_reply_ticket_path(@ticket), params: { body: }
+      assert_response :success
+      assert_match "Emin misin?", response.body
+      assert_select 'form[action=?]', reply_ticket_path(@ticket), count: 0
+      assert_select 'input[name=preview_token]', count: 0
+      post reply_ticket_path(@ticket), params: { body:, review_id: ReplyReview.last.id, status: "safe" }
+    end
+    assert_nil @ticket.reload.first_response_at
+    post internal_note_ticket_path(@ticket), params: { body: }
+    assert @ticket.messages.last.visibility_internal?
+    sign_in("customer")
+    get ticket_path(@ticket)
+    assert_no_match "ÜMİT-DEMO", response.body
+  end
+
+  test "uncertain and unavailable results preserve draft but never show send" do
+    create_ticket
+    sign_in("agent")
+    post assign_ticket_path(@ticket)
+    %w[uncertain unavailable].each do |state|
+      @guard_result = ContentGuard::Result.new(status: state, category: "uncertain", reason: "Test sonucu", model: "test-double")
+      post preview_reply_ticket_path(@ticket), params: { body: "Kaybolmayan taslak" }
+      assert_response :success
+      assert_select '#review-body', text: "Kaybolmayan taslak"
+      assert_select 'form[action=?]', reply_ticket_path(@ticket), count: 0
+    end
+  end
+
+  test "editing a rejected draft requires a fresh successful review" do
+    create_ticket
+    sign_in("agent")
+    post assign_ticket_path(@ticket)
+    @guard_result = ContentGuard::Result.new(status: "blocked", category: "disrespect", reason: "Uygun değil", model: "test-double")
+    post preview_reply_ticket_path(@ticket), params: { body: "İlk taslak" }
+    assert_select 'input[name=preview_token]', count: 0
+    @guard_result = ContentGuard::Result.new(status: "safe", category: "customer_ready", reason: "Uygun", model: "test-double")
+    post preview_reply_ticket_path(@ticket), params: { body: "Düzeltilmiş yanıt" }
+    token = preview_token
+    post reply_ticket_path(@ticket), params: { preview_token: token }
+    assert_equal "Düzeltilmiş yanıt", @ticket.messages.last.body
+    assert_equal %w[blocked safe], @ticket.reply_reviews.order(:id).pluck(:status)
   end
 
   test "end to end customer creates agent assigns notes replies resolves customer reopens" do
@@ -176,3 +240,4 @@ class CoreFlowTest < ActionDispatch::IntegrationTest
     assert_select 'script', count: 0
   end
 end
+

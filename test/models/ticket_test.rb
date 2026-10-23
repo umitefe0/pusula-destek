@@ -40,7 +40,7 @@ class TicketTest < ActiveSupport::TestCase
     public_answer
     first = @ticket.reload.first_response_at
     travel_to @ticket.first_response_due_at + 2.hours do
-      TicketWorkflow.new(@ticket, @agent).public_reply!(body: "Yeni gelişme", submission_key: SecureRandom.uuid)
+      TicketWorkflow.new(@ticket, @agent).public_reply!(body: "Yeni gelişme", review: approved_review("Yeni gelişme"), submission_key: SecureRandom.uuid)
       assert_equal first, @ticket.reload.first_response_at
       assert_not @ticket.overdue?
     end
@@ -122,14 +122,14 @@ class TicketTest < ActiveSupport::TestCase
 
   test "public reply before assignment is rejected without message or event" do
     assert_no_difference ["Message.count", "TicketEvent.count"] do
-      assert_raises(Ticket::InvalidTransition) { TicketWorkflow.new(@ticket, @agent).public_reply!(body: "Yanıt", submission_key: "unassigned") }
+      assert_raises(Ticket::InvalidTransition) { TicketWorkflow.new(@ticket, @agent).public_reply!(body: "Yanıt", review: approved_review("Yanıt"), submission_key: "unassigned") }
     end
   end
 
   test "all core transitions are logged with actor" do
     flow = TicketWorkflow.new(@ticket, @agent)
     flow.assign!
-    flow.public_reply!(body: "Çözdük", submission_key: SecureRandom.uuid)
+    flow.public_reply!(body: "Çözdük", review: approved_review("Çözdük"), submission_key: SecureRandom.uuid)
     flow.resolve!
     assert @ticket.solved?
     assert_equal %w[assigned replied resolved], @ticket.ticket_events.order(:id).pluck(:action)
@@ -139,7 +139,7 @@ class TicketTest < ActiveSupport::TestCase
   test "blank reply rolls back all changes" do
     TicketWorkflow.new(@ticket, @agent).assign!
     assert_no_difference ["Message.count", "TicketEvent.count"] do
-      assert_raises(ActiveRecord::RecordInvalid) { TicketWorkflow.new(@ticket, @agent).public_reply!(body: "", submission_key: "invalid") }
+      assert_raises(ActiveRecord::RecordInvalid) { TicketWorkflow.new(@ticket, @agent).public_reply!(body: "", review: approved_review(""), submission_key: "invalid") }
     end
     assert @ticket.reload.open?
     assert_nil @ticket.first_response_at
@@ -148,9 +148,9 @@ class TicketTest < ActiveSupport::TestCase
   test "repeat submission is idempotent" do
     flow = TicketWorkflow.new(@ticket, @agent)
     flow.assign!
-    flow.public_reply!(body: "Tek yanıt", submission_key: "same-key")
+    flow.public_reply!(body: "Tek yanıt", review: approved_review("Tek yanıt"), submission_key: "same-key")
     assert_no_difference ["Message.count", "TicketEvent.count"] do
-      flow.public_reply!(body: "Tek yanıt", submission_key: "same-key")
+      flow.public_reply!(body: "Tek yanıt", review: approved_review("Tek yanıt"), submission_key: "same-key")
     end
   end
 
@@ -178,6 +178,6 @@ class TicketTest < ActiveSupport::TestCase
     public_answer
     TicketWorkflow.new(@ticket, @agent).resolve!
     assert_raises(Ticket::InvalidTransition) { TicketWorkflow.new(@ticket, @customer).customer_reply!(body: "Mesaj") }
-    assert_raises(Ticket::InvalidTransition) { TicketWorkflow.new(@ticket, @agent).public_reply!(body: "Mesaj", submission_key: "closed") }
+    assert_raises(Ticket::InvalidTransition) { TicketWorkflow.new(@ticket, @agent).public_reply!(body: "Mesaj", review: approved_review("Mesaj"), submission_key: "closed") }
   end
 end

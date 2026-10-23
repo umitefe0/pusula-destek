@@ -33,3 +33,11 @@ Talep = Ticket; müşteri = customer; görevli = agent; iç not = internal; mü�
 - Ruby'nin Windows'taki Türkçe dizin sorununda yerel ASCII sürücü takma adı kullanılabilir; bu makineye özel yol repoya konmaz.
 - Bağımlılık kilidi Windows ve Linux platformlarını içerir.
 - Gerçek harcama/token sayısı ölçülmediyse bilinmiyor yazılır; tahmin gerçek maliyet diye gösterilmez.
+
+## 23 Ekim — öğrenciyle kabul edilen ikinci hafta kapsamı
+- Ümit Efe'nin kişisel hedefi: ekip içi içeriğin yanlışlıkla müşteriye gitmesine karşı akıllı koruma.
+- Öğrencinin "tamam yapalım ödevi" isteğiyle mevcut ürün üzerinde devam kararı alındı. Groq hesabına giriş öğrenci tarafından yapıldı; anahtar sohbet veya depoda tutulmaz.
+- Karar anahtar kelimeyle değil gerçek LLM çağrısıyla verilir. Riskli/belirsiz taslakta gönder düğmesi yok; "Emin misin?" gerekçesi, düzeltme ve iç nota kaydetme seçenekleri var.
+- API hatası/eksik anahtar/zaman aşımı onay sayılmaz. Sunucu onayı taslak özeti, görevli, talep ve 15 dakika süresine bağlar.
+- Model doğruluğu garantili değildir; müşteri verileri yerine sentetik demo metinleri kullanılır. Test sağlayıcısı ile gerçek Groq doğrulaması ayrıdır.
+- Deploy ve ajan çalışma adımları ayrıca kökteki AGENTS.md'dedir.

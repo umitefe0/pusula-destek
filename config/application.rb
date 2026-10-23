@@ -15,7 +15,7 @@ module PusulaDestek
     config.i18n.default_locale = :tr
     config.i18n.available_locales = [:tr, :en]
     config.generators.system_tests = nil
-    config.filter_parameters += [:token, :preview_token, :body, :description]
+    config.filter_parameters += [:token, :preview_token, :body, :description, :api_key]
     config.action_dispatch.cookies_same_site_protection = :lax
     config.session_store :cookie_store, key: "_pusula_session", expire_after: 12.hours
   end

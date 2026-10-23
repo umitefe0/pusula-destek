@@ -13,8 +13,14 @@
 “Talep akışını, ayrı iç not formunu ve önizlemeyi çalışır hâle getirdim. Üzerine dış yanıt taslağının anlamını LLM ile kontrol eden bir koruma ekleyeceğim. Riskte gönder düğmesi görünmeyecek, ‘Emin misin?’ uyarısı ve gerekçe çıkacak. Taslak düzeltilebilecek veya iç nota alınabilecek. Kontrol tamamlanamazsa gönderilmeyecek.”
 
 ## Yapılanlar ve kanıt
-- Uygulama ve doğrulama devam ediyor. Henüz bu haftanın canlı LLM demosu tamamlandı iddiası yoktur.
-- Kanıtlar tamamlandıkça commit, test ve canlı adımlar bu bölüme eklenecek.
+- [Başlangıç vaadi commit'i](https://github.com/umitefe0/pusula-destek/commit/3597836).
+- Groq structured JSON sınıflandırması, riskli/belirsiz içerikte gönder düğmesinin kaldırılması, düzeltme ve ekip içi nota kaydetme eklendi.
+- Sunucu kontrolü aynı talep/görevli/metin ve 15 dakika koşulunu zorunlu kılıyor. API hatası, kota ve eksik anahtar gönderimi açmıyor.
+- 23 Ekim yerel doğrulama: **52 test, 301 assertion, 0 failure/error/skip**. Zeitwerk ve assets derlemesi geçti. Testler gerçek API çağırmaz; sağlayıcı taklidi kullanılır.
+- Yerel tarayıcıda eksik anahtar durumunda taslağın korunduğu ve gönder düğmesinin bulunmadığı görüldü.
+- GitHub Actions ve canlı gerçek LLM kontrolü henüz bekliyor. Başarılı olduğu iddia edilmiyor.
+- Demo adımları ve kod haritası: [ikinci hafta sunumu](docs/hafta-2-sunum.md).
+- Yapılamayanlar: geniş kullanıcı deneyi/doğruluk ölçümü, RAG ve agent-first akış yok. Bunlar bu haftanın vaadi değildi. LLM kontrolü yüzde yüz sızıntı önleme değildir.
 
 ## Zaman
 - İlk uygulama prompt'u (olduğu gibi): `tamam yapalım ödevi`

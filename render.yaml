@@ -8,6 +8,12 @@ services:
     startCommand: bundle exec puma -C config/puma.rb
     healthCheckPath: /up
     envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-20b
+      - key: GROQ_DAILY_LIMIT
+        value: "300"
       - key: RAILS_ENV
         value: production
       - key: BUNDLE_WITHOUT

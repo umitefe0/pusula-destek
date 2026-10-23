@@ -5,3 +5,12 @@
 @media(max-width:1150px){.sidebar{width:200px;padding:27px 16px}.main-shell{margin-left:200px;width:calc(100% - 200px)}main{padding:28px 24px}.topbar{padding:0 24px}.queue-toolbar{flex-wrap:wrap;padding:0 16px 12px}.search{width:100%}.stats{gap:10px}.stat-card{padding:15px}.detail-grid{grid-template-columns:minmax(0,1fr) 240px}.demo-chip{display:none}td{padding:18px 14px}th{padding:14px}.tabs{gap:19px}}
 @media(max-width:800px){.sidebar{position:static;width:100%;padding:16px 20px;border-right:0;border-bottom:1px solid var(--line);flex-direction:row;align-items:center;justify-content:space-between}.sidebar .workspace-label,.sidebar .nav-label,.sidebar .sidebar-bottom{display:none}.sidebar nav{display:none}.brand{font-size:20px}.brand img{width:32px;height:32px}.brand-sub{font-size:8px}.app-shell{display:block}.main-shell{margin:0;width:100%}.topbar{height:auto;min-height:65px;padding:14px 20px;flex-wrap:wrap}.breadcrumb{font-size:10px}.topbar-right{gap:10px}main{padding:25px 18px}.stats{grid-template-columns:1fr 1fr}.stat-card strong{font-size:30px}h1{font-size:27px}.page-heading{gap:12px}.today{display:none}.detail-grid{grid-template-columns:1fr}.detail-aside{display:grid;grid-template-columns:1fr 1fr;gap:15px}.ticket-heading{flex-wrap:wrap}.ticket-heading h1{font-size:24px}.welcome{padding:20px 0}.welcome h1{font-size:44px}.entry-grid{grid-template-columns:1fr}.entry-card{padding:24px}.welcome-facts{flex-wrap:wrap;gap:14px}.queue-toolbar{overflow:auto}.tabs{gap:20px}.tab{font-size:10px}.table-footer{font-size:9px;gap:15px}.bottom-tip{padding:15px}.compose-footer{flex-wrap:wrap}.compose-footer .button{width:100%}.message-body{margin-left:0}.message-header time{width:100%;margin-left:41px}.form-panel,.preview-panel{padding:22px}.recipient{flex-wrap:wrap}.recipient>.status{margin:0}footer{padding:12px 20px 20px;flex-direction:column;font-size:9px}.topbar-right .button{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.guard-result {padding:24px 28px;border-left:6px solid;border-radius:14px 14px 0 0}
+.guard-result h2 {margin:0 0 8px;font-size:24px}
+.guard-result p {line-height:1.6;margin:8px 0}
+.guard-result small {display:block;margin-top:16px;overflow-wrap:anywhere}
+.guard-stop {background:#fff3e7;border-color:#b94717;color:#713113}
+.guard-safe {background:#edf8f2;border-color:#28744d;color:#205039}
+.guard-edit {margin-top:24px}
+.guard-edit > p,.guard-edit > small {color:#596274;line-height:1.6}
+.guard-edit label {display:block;margin:16px 0 8px;font-weight:600}

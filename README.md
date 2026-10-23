@@ -9,6 +9,20 @@ Ruby on Rails 8.1 ile müşteri talebi → atama → yanıt → çözüm → yen
 - Repo: https://github.com/umitefe0/pusula-destek
 - Çalışma kuralları: [AGENT.md](AGENT.md); [ilk sürüm](docs/agent-initial.md).
 
+## İkinci hafta — anlam temelli gönderim koruması
+
+[CHALLENGE_LOG.md](CHALLENGE_LOG.md) · [Yeni sunum akışı](docs/hafta-2-sunum.md) · [Ajan ve deploy kuralları](AGENTS.md)
+
+Görevli yanlışlıkla dış yanıt kutusuna ekip içi bilgi yazarsa ayrı form tek başına yetmez. Yeni kontrol taslağın anlamını **Groq üzerinden `openai/gpt-oss-20b`** ile değerlendirir. Anahtar kelime eşleştirmesi yapılmaz. Riskli veya belirsiz taslakta **“Emin misin?”** gerekçesi görünür, müşteriye gönder düğmesi gizlenir. Görevli taslağı düzeltebilir veya ekip içi not olarak kaydedebilir. API hatası/eksik anahtar/limit durumunda gönderim kapalı kalır.
+
+Onay sunucuda talep, görevli, taslağın SHA-256 özeti ve 15 dakika geçerliliğe bağlanır. Doğrudan POST veya sonradan metin değişikliği bu kontrolü atlayamaz. Müşteri tarafından yazılan mesajlara uygulanmaz. Kontrol sırasında yalnız dış yanıt taslağı Groq'a gider; geçmiş görüşme, müşteri profili ve diğer iç notlar gönderilmez. Demo metinleri sentetik olmalıdır. Karar/gerekçe/model kaydedilir; kontrol kaydında taslağın kendisi yerine özeti tutulur.
+
+Sağlayıcı [structured outputs belgesi](https://console.groq.com/docs/structured-outputs) temel alınmıştır. JSON şeması biçimi sınırlar; modelin anlam kararını doğru kılma garantisi değildir. Testlerde sağlayıcı taklidi kullanılır, gerçek model denemesi ayrı kanıttır.
+
+Render → Environment: `GROQ_API_KEY` gizli değer; model varsayılanı `openai/gpt-oss-20b`; `GROQ_DAILY_LIMIT` varsayılanı 300 kontrol/24 saat. Çalışma alanı başına 30 kontrol/saat. Günlük toplam sayaç eşzamanlı farklı oturumlarda az miktarda aşılabilen demo sınırıdır, faturalama garantisi değildir. Anahtarı repo veya sohbet içine yazmayın. Ücretsiz sağlayıcı kotası biterse hatalı onay verilmez.
+
+İsteğe bağlı gerçek sağlayıcı değerlendirmesi: `bundle exec rails runner script/evaluate_content_guard.rb` (ortamda anahtar gerektirir; altı sentetik örnek, mock yok). Canlı doğrulama durumu ve eksikler CHALLENGE_LOG.md'de tutulur.
+
 ## Aort dilimi ve zaman kuralları
 
 Müşteri talep açar; görevli üstlenir, iç not ekleyebilir, müşteriye yanıtı önizleyip gönderir. Müşteri yanıt verince talep işlemde durumuna döner. Görevli çözer; müşteri süre dolmadan yeniden açar.
@@ -46,7 +60,7 @@ Stanley Black & Decker, [13 Şubat 2025 tarihli resmi yazısında](https://www.s
 
 [Capterra yorumları](https://www.capterra.com/p/164283/Zendesk/reviews/): **Meghann O.**, Customer Success Manager, **8 Eylül 2025**, “Lots of functionality but difficult to navigate”. Kullanıcı iç not yerine yanlışlıkla müşteriye yanıt göndermenin kolaylığından yakınıyor.
 
-Sunum cümlesi: **Destek görevlisinin iç notu yanlışlıkla müşteriye gönderme acısını, Meghann O.'nun Capterra yorumundan aldım; ayrı iç not alanı ve alıcısı görünen zorunlu yanıt önizlemesiyle çözdüm.**
+İlk haftanın sunum cümlesi: **Destek görevlisinin iç notu yanlışlıkla müşteriye gönderme acısını, Meghann O.'nun Capterra yorumundan aldım; ayrı iç not alanı ve alıcısı görünen zorunlu yanıt önizlemesiyle çözdüm.**
 
 Ayrı form/uç nokta, 15 dakika geçerli imzalı önizleme ve çift gönderimi önleyen anahtar kullanılır. Müşteri sorguları iç notları dışarıda bırakır. Orijinal üründe iç not olmadığı iddia edilmiyor; çözüm bir kullanılabilirlik tercihidir. Kullanıcı deneyinde ölçülmüş hata azalması yoktur.
 
@@ -54,7 +68,7 @@ Ayrı form/uç nokta, 15 dakika geçerli imzalı önizleme ve çift gönderimi �
 
 Orijinal kod kapalıdır; doğrulanmış satır sayısı yoktur. **Yaklaşık 300.000 satır**, 200–500 bin belirsizlik aralığıyla kendi mühendislik tahminimizdir, satıcı verisi değildir. Varsayımsal dağılım: talep/iş akışı 70 bin, çok kanallı iletişim 60 bin, hesap/yetki 40 bin, otomasyon/SLA 40 bin, arama/raporlama 50 bin, bilgi bankası 40 bin. Yukarıdaki resmi müşteri hikâyesi kurumsal modül kapsamını destekler; sayısal dağılım bizim varsayımımızdır.
 
-Bu repodaki app/config/db/test kaynakları 36 dosyada 1.139 fiziksel satırdır (Ruby, ERB, CSS, SVG, YAML; boş satırlar dahil; bağımlılıklar hariç). Sıkıştırılmış CSS/ERB nedeniyle bu sayı ürün karmaşıklığının ölçüsü değildir.
+İlk hafta sonunda app/config/db/test kaynakları 36 dosyada 1.139 fiziksel satırdır (Ruby, ERB, CSS, SVG, YAML; boş satırlar dahil; bağımlılıklar hariç). Sıkıştırılmış CSS/ERB nedeniyle bu sayı ürün karmaşıklığının ölçüsü değildir.
 
 Bu aort dilimi için başlangıç tahmini **2–4 aktif gün**, 2–6 milyon giriş ve 0,4–1 milyon çıkış tokenı. [GPT-5.4 resmi fiyatı](https://developers.openai.com/api/docs/models/gpt-5.4) karşılaştırma ölçütüyle (milyon giriş 2,50 dolar, çıkış 15 dolar) **11–30 dolar**, iki kat deneme payıyla **22–60 dolar**. Uzun bağlam ek ücretleri uygulanmayan istekler varsayılmıştır. Bu hesap kullanılan Codex oturumunun faturası değildir.
 
@@ -86,7 +100,7 @@ Render ilk kez kullanılan platformdur. `render.yaml` ücretsiz web servisi ve P
 
 [Ücretsiz plan](https://render.com/docs/free): web servisi 15 dakika hareketsizlikte uyuyabilir; ücretsiz PostgreSQL 30 gün sonra sona erer. Sunum öncesi uygulamayı açıp uyandırın ve panelde veritabanı süresini kontrol edin. Oluşturulan ücretsiz veritabanının panelde görünen bitiş tarihi **16 Kasım 2026**. [Rails 8 deploy belgesi](https://render.com/docs/deploy-rails-8). Veriler geçici uygulama diskinde değil PostgreSQL'de tutulur.
 
-## Sunum ve kod haritası
+## İlk hafta sunumu ve kod haritası
 
 - 30 sn: ürün, kaynaklı kurumsal ödeme gerekçesi.
 - 2 dk: müşteri talep aç → görevli üstlen → iç not → önizle ve yanıtla → müşteri yanıtla → görevli çöz → müşteri yeniden aç.
@@ -95,6 +109,9 @@ Render ilk kez kullanılan platformdur. `render.yaml` ücretsiz web servisi ve P
 - 30 sn: “SLA hafta sonunu saymasın” için model süre kuralı ve `app/controllers/tickets_controller.rb` son tarih hesabı. Yalnızca 4.hours değiştirilmez: ortak iş takvimi hesabı ve cuma/hafta sonu testleri gerekir; `app/services/demo_workspace.rb` de aynı hesabı kullanmalıdır.
 
 ## Yapamadıklarım
+
+- LLM kararları için geniş/bağımsız doğruluk ölçümü yok; yanlış onay ve yanlış engelleme mümkündür. RAG veya agent-first akış eklenmedi; fark katmanı LLM sınıflandırmasıdır.
+- API kapalıyken dış yanıt gönderilemez; bypass düğmesi yok.
 
 - Gerçek hesap/parola/SSO yok; demo rolleri değiştirilebilir.
 - Gerçek e-posta/SMS, dosya eki ve dış kanal entegrasyonu yok; yanıt portalda görünür.

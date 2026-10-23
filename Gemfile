@@ -6,6 +6,7 @@ gem "activerecord", "~> 8.1.0"
 gem "actionpack", "~> 8.1.0"
 gem "propshaft", "~> 1.3"
 gem "minitest", "~> 5.25"
+gem "net-http", "~> 0.6"
 gem "tzinfo-data", platforms: %i[windows jruby]
 gem "sqlite3", "~> 2.9", group: [:development, :test]
 gem "pg", "~> 1.6", group: :production

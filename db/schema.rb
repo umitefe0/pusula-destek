@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_12_000100) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_000000) do
   create_table "messages", force: :cascade do |t|
     t.integer "ticket_id", null: false
     t.integer "author_id", null: false
@@ -22,6 +22,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_000100) do
     t.index ["author_id"], name: "index_messages_on_author_id"
     t.index ["submission_key"], name: "index_messages_on_submission_key", unique: true
     t.index ["ticket_id"], name: "index_messages_on_ticket_id"
+  end
+
+  create_table "reply_reviews", force: :cascade do |t|
+    t.integer "ticket_id", null: false
+    t.integer "author_id", null: false
+    t.string "body_digest", null: false
+    t.string "status", null: false
+    t.string "category", null: false
+    t.text "reason", null: false
+    t.string "model", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_reply_reviews_on_author_id"
+    t.index ["created_at"], name: "index_reply_reviews_on_created_at"
+    t.index ["ticket_id"], name: "index_reply_reviews_on_ticket_id"
   end
 
   create_table "ticket_events", force: :cascade do |t|
@@ -75,6 +91,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_000100) do
 
   add_foreign_key "messages", "tickets"
   add_foreign_key "messages", "users", column: "author_id"
+  add_foreign_key "reply_reviews", "tickets"
+  add_foreign_key "reply_reviews", "users", column: "author_id"
   add_foreign_key "ticket_events", "tickets"
   add_foreign_key "ticket_events", "users", column: "actor_id"
   add_foreign_key "tickets", "users", column: "assignee_id"

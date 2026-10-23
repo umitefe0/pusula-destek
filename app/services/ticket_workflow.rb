@@ -16,9 +16,12 @@ class TicketWorkflow
     end
   end
 
-  def public_reply!(body:, submission_key:)
+  def public_reply!(body:, submission_key:, review: nil)
     require_agent!
     mutate("replied") do
+      unless review&.reload&.permits?(ticket: @ticket, author: @actor, body: body)
+        raise Ticket::InvalidTransition, "İçerik kontrolü geçersiz veya süresi doldu. Taslağı yeniden kontrol edin."
+      end
       # A signed preview may be submitted twice; do not duplicate the reply/event.
       return @ticket if @ticket.messages.exists?(submission_key: submission_key)
       raise Ticket::InvalidTransition, "Önce talebi üstlenin; çözülmüş talebe yanıt verilemez." unless @ticket.open? || @ticket.pending?
