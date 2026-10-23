@@ -40,8 +40,10 @@ class ContentGuardTest < ActiveSupport::TestCase
   end
 
   test "network timeout fails closed" do
-    guard = ContentGuard.new(api_key: "test", transport: ->(_) { raise Net::ReadTimeout })
-    assert_equal "unavailable", guard.call("Merhaba").status
+    [Net::ReadTimeout, Net::OpenTimeout, Net::WriteTimeout, Net::HTTPBadResponse].each do |error|
+      guard = ContentGuard.new(api_key: "test", transport: ->(_) { raise error })
+      assert_equal "unavailable", guard.call("Merhaba").status
+    end
   end
 
   test "HTTP authentication rate limit and server failures never approve" do

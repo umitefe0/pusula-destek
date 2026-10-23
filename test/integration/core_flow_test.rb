@@ -240,4 +240,3 @@ class CoreFlowTest < ActionDispatch::IntegrationTest
     assert_select 'script', count: 0
   end
 end
-

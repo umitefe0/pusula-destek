@@ -42,7 +42,8 @@ class ContentGuard
     raise InvalidResponse if (status == "uncertain") != (category == "uncertain")
     Result.new(status:, category:, reason: reason.strip, model: @model)
   rescue InvalidResponse, JSON::ParserError, KeyError, TypeError, NoMethodError,
-         Net::OpenTimeout, Net::ReadTimeout, SocketError, IOError, SystemCallError, OpenSSL::SSL::SSLError
+         Net::OpenTimeout, Net::ReadTimeout, Net::WriteTimeout, Net::HTTPBadResponse,
+         SocketError, IOError, SystemCallError, OpenSSL::SSL::SSLError
     # Never log the draft, API key or provider response (which may contain the draft).
     unavailable("Kontrol tamamlanamadı. Biraz sonra yeniden deneyin veya ekip içi not olarak kaydedin.")
   end
@@ -77,7 +78,11 @@ class ContentGuard
     req["Content-Type"] = "application/json"
     req.body = JSON.generate(payload)
     response = http.request(req)
-    raise InvalidResponse unless response.is_a?(Net::HTTPSuccess) && response.body.bytesize <= 65_536
+    unless response.is_a?(Net::HTTPSuccess)
+      Rails.logger.warn("ContentGuard provider HTTP #{response.code}; outgoing reply remains blocked")
+      raise InvalidResponse
+    end
+    raise InvalidResponse unless response.body.bytesize <= 65_536
     JSON.parse(response.body)
   end
 end
