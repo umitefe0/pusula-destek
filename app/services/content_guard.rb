@@ -22,6 +22,9 @@ class ContentGuard
     Give a short Turkish reason explaining the risk without repeating secrets or abusive
     content. Never rewrite the draft. safe must use category customer_ready;
     uncertain must use category uncertain; blocked must use another category.
+    DİL KURALI: reason alanını her durumda yalnızca Türkçe yaz. İngilizce açıklama yazma.
+    Örnek güvenli gerekçe: "Metin müşteriye yönelik saygılı bir çözüm ve sonraki adımı içeriyor."
+    Örnek riskli gerekçe: "Metin ekip içinde kalması gereken bir talimat içeriyor."
   TEXT
 
   def initialize(api_key: ENV["GROQ_API_KEY"], model: ENV.fetch("GROQ_MODEL", "openai/gpt-oss-20b"), transport: nil)
@@ -60,7 +63,8 @@ class ContentGuard
       messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: body }],
       response_format: { type: "json_schema", json_schema: { name: "outgoing_review", strict: true, schema: {
         type: "object", additionalProperties: false, required: %w[status category reason], properties: {
-          status: { type: "string", enum: STATUSES }, category: { type: "string", enum: CATEGORIES }, reason: { type: "string" }
+          status: { type: "string", enum: STATUSES }, category: { type: "string", enum: CATEGORIES },
+          reason: { type: "string", description: "Yalnızca Türkçe kısa açıklama. Sırları veya hakaretleri tekrarlama." }
         }
       } } }
     }
