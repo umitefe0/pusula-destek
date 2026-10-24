@@ -21,7 +21,9 @@ Sağlayıcı [structured outputs belgesi](https://console.groq.com/docs/structur
 
 Render → Environment: `GROQ_API_KEY` gizli değer; model varsayılanı `openai/gpt-oss-20b`; `GROQ_DAILY_LIMIT` varsayılanı 300 kontrol/24 saat. Çalışma alanı başına 30 kontrol/saat. Günlük toplam sayaç eşzamanlı farklı oturumlarda az miktarda aşılabilen demo sınırıdır, faturalama garantisi değildir. Anahtarı repo veya sohbet içine yazmayın. Ücretsiz sağlayıcı kotası biterse hatalı onay verilmez.
 
-İsteğe bağlı gerçek sağlayıcı değerlendirmesi: `bundle exec rails runner script/evaluate_content_guard.rb` (ortamda anahtar gerektirir; altı sentetik örnek, mock yok). Canlı doğrulama durumu ve eksikler CHALLENGE_LOG.md'de tutulur.
+23 Ekim yerel sonuç: **52 test, 304 assertion, 0 failure/error/skip**. [GitHub Actions (7a4f7bc)](https://github.com/umitefe0/pusula-destek/actions/runs/40085962679) başarılı. Canlı kanıt ve güncel commit bilgisi CHALLENGE_LOG.md’dedir.
+
+İsteğe bağlı gerçek sağlayıcı değerlendirmesi: `bundle exec rails runner script/evaluate_content_guard.rb` (ortamda anahtar gerektirir; altı sentetik örnek, mock yok). 24 Ekim canlı tarayıcı doğrulamasında 8 sentetik örnek beklenen sınıfta sonuçlandı; sonuçlar ve önceki yanlış engelleme CHALLENGE_LOG.md’de açıkça kayıtlıdır. Bu küçük set genel doğruluk garantisi değildir.
 
 ## Aort dilimi ve zaman kuralları
 
@@ -74,7 +76,7 @@ Bu aort dilimi için başlangıç tahmini **2–4 aktif gün**, 2–6 milyon gir
 
 300 bin satırlık daha geniş çekirdek için ayrı kaba senaryo: satır başına 10 çıkış tokenı ve 2–3 üretim/onarım turu = 6–9 milyon çıkış; 20–40 milyon girişle **140–235 dolar ham model bedeli**. Entegrasyon ve insan doğrulaması dahil **20–60 aktif gün** öngörüsü deneyle doğrulanmadı. Bu hesap kurumsal ürün eşdeğerliğini veya operasyon maliyetlerini kapsamaz.
 
-**Gerçekleşen:** Çalışma 12 Ekim'de başladı, 17 Ekim'de devam etti; kesinti nedeniyle beş takvim günü beş aktif gün değildir. Aktif süre ve token sayısı ölçülmedi. Ek ücretli API/hosting satın alınmadı. Kullanıcının bildirdiği mevcut plan **ChatGPT Plus, aylık 20 ABD dolarıdır**. Plus bir abonelik planıdır; model adı değildir. Bu çalışma mevcut abonelik kapsamında yapıldı; ödeve özel ek API/hosting harcaması **0 dolar** oldu. Aylık 20 doların yalnızca bu ödeve düşen payı ve token bazlı karşılığı ölçülmedi; bu nedenle 20 doların tamamını ödeve özel tüketim olarak göstermiyoruz. Tahmin gerçekleşmiş harcama olarak sunulmuyor.
+**İlk hafta gerçekleşen:** Çalışma 12 Ekim'de başladı, 17 Ekim'de devam etti; kesinti nedeniyle beş takvim günü beş aktif gün değildir. Aktif süre ve token sayısı ölçülmedi. Ek ücretli API/hosting satın alınmadı. Kullanıcının bildirdiği mevcut plan **ChatGPT Plus, aylık 20 ABD dolarıdır**. Plus bir abonelik planıdır; model adı değildir. Bu çalışma mevcut abonelik kapsamında yapıldı; ödeve özel ek API/hosting harcaması **0 dolar** oldu. Aylık 20 doların yalnızca bu ödeve düşen payı ve token bazlı karşılığı ölçülmedi; bu nedenle 20 doların tamamını ödeve özel tüketim olarak göstermiyoruz. Tahmin gerçekleşmiş harcama olarak sunulmuyor.
 
 ## Kurulum ve doğrulama
 

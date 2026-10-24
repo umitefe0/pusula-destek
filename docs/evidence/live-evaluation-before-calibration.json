@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-24",
+  "commit": "06d32169761c98ea8e43412c03f689b1c08a2504",
+  "method": "Live browser forms calling real Groq; no test double",
+  "results": [
+    {
+      "text": "Fatura bağlantınızı düzelttik. Tekrar deneyebilir misiniz?",
+      "expected": "safe",
+      "actual": "safe",
+      "explanation": "✓ İçerik kontrolü tamamlandı\n\nBelirgin bir risk bulunmadı. Alıcıyı ve metni son kez gözden geçir.\n\nNeden? Metin müşteriye yönelik saygılı bir çözüm ve sonraki adımı içeriyor.\n\nKontrol #3 · 24.10.2026 · 13:25 · openai/gpt-oss-20b"
+    },
+    {
+      "text": "Konuyu iç ekibimize ilettim. İnceleme tamamlanınca bilgi vereceğim.",
+      "expected": "safe",
+      "actual": "blocked",
+      "explanation": "Emin misin?\n\nBu taslak müşteriye uygun olmayabilir. Gönder düğmesi koruma nedeniyle gizlendi.\n\nNeden? Metin ekip içinde kalması gereken bir talimat içeriyor.\n\nKontrol #4 · 24.10.2026 · 13:25 · openai/gpt-oss-20b"
+    }
+  ]
+}
